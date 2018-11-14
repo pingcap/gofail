@@ -76,6 +76,7 @@ func enableAndLock(failpath, inTerms string) (func(), error) {
 	}
 	fp.mu.Lock()
 	fp.t = t
+	fp.waitChan = make(chan struct{})
 	return func() { fp.mu.Unlock() }, nil
 }
 
