@@ -24,7 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pingcap/gofail/code"
+	"github.com/etcd-io/gofail/code"
 )
 
 type xfrmFunc func(io.Writer, io.Reader) ([]*code.Failpoint, error)

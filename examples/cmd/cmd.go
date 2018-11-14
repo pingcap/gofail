@@ -18,7 +18,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/pingcap/gofail/examples"
+	"github.com/etcd-io/gofail/examples"
 )
 
 func main() {
