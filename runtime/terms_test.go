@@ -17,6 +17,7 @@ package runtime
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestTermsString(t *testing.T) {
@@ -30,7 +31,7 @@ func TestTermsString(t *testing.T) {
 		{`1*return("abc")->return("def")`, []string{"abc", "def", "def"}},
 	}
 	for _, tt := range tests {
-		ter, err := newTerms("test", tt.desc)
+		ter, err := newTerms("test", tt.desc, nil)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -61,7 +62,7 @@ func TestTermsTypes(t *testing.T) {
 		{`return()`, struct{}{}},
 	}
 	for _, tt := range tests {
-		ter, err := newTerms("test", tt.desc)
+		ter, err := newTerms("test", tt.desc, nil)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -73,4 +74,35 @@ func TestTermsTypes(t *testing.T) {
 			t.Fatalf("got %v, expected %v", v, tt.weval)
 		}
 	}
+}
+
+func TestPause(t *testing.T) {
+	fp := NewFailpoint("gofail", "testPause")
+	tests := []struct {
+		desc  string
+		weval interface{}
+	}{
+		{`pause`, nil},
+	}
+	c := make(chan struct{})
+	go func() {
+		time.Sleep(time.Second)
+		Disable("gofail/testPause")
+		close(c)
+	}()
+	for _, tt := range tests {
+		ter, err := newTerms("gofail/testPause", tt.desc, fp)
+		if err != nil {
+			t.Fatal(err)
+		}
+		start := time.Now()
+		v, _ := ter.eval()
+		if v != nil {
+			t.Fatalf("got %v, excepted %v", v, nil)
+		}
+		if time.Since(start) < 100*time.Millisecond {
+			t.Fatalf("not paused")
+		}
+	}
+	<-c
 }

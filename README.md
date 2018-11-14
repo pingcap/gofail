@@ -101,7 +101,7 @@ From a unit test,
 import (
 	"testing"
 
-	gofail "github.com/etcd-io/gofail/runtime"
+	gofail "github.com/pingcap/gofail/runtime"
 )
 
 func TestWhatever(t *testing.T) {
