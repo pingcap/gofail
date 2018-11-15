@@ -52,7 +52,7 @@ func (fp *Failpoint) Acquire() (interface{}, error) {
 // Release is called when the failpoint exists.
 func (fp *Failpoint) Release() { fp.mu.RUnlock() }
 
-// Pause pause until disable the failpoint.
+// Pause will pause until the failpoint is disabled.
 func (fp *Failpoint) Pause() {
 	<-fp.waitChan
 }

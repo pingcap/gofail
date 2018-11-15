@@ -78,31 +78,23 @@ func TestTermsTypes(t *testing.T) {
 
 func TestPause(t *testing.T) {
 	fp := NewFailpoint("gofail", "testPause")
-	tests := []struct {
-		desc  string
-		weval interface{}
-	}{
-		{`pause`, nil},
-	}
 	c := make(chan struct{})
 	go func() {
 		time.Sleep(time.Second)
 		Disable("gofail/testPause")
 		close(c)
 	}()
-	for _, tt := range tests {
-		ter, err := newTerms("gofail/testPause", tt.desc, fp)
-		if err != nil {
-			t.Fatal(err)
-		}
-		start := time.Now()
-		v, _ := ter.eval()
-		if v != nil {
-			t.Fatalf("got %v, excepted %v", v, nil)
-		}
-		if time.Since(start) < 100*time.Millisecond {
-			t.Fatalf("not paused")
-		}
+	ter, err := newTerms("gofail/testPause", "pause", fp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	start := time.Now()
+	v, _ := ter.eval()
+	if v != nil {
+		t.Fatalf("got %v, excepted %v", v, nil)
+	}
+	if time.Since(start) < 100*time.Millisecond {
+		t.Fatalf("not paused")
 	}
 	<-c
 }
