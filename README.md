@@ -1,6 +1,8 @@
 # gofail
 
-[![Build Status](https://travis-ci.com/etcd-io/gofail.svg?branch=master)](https://travis-ci.com/etcd-io/gofail)
+Forked from [etcd-io](github.com/etcd-io/gofail)
+
+[![Build Status](https://travis-ci.com/pingcap/gofail.svg?branch=master)](https://travis-ci.com/pingcap/gofail)
 
 An implementation of [failpoints][failpoint] for golang.
 
@@ -101,7 +103,7 @@ From a unit test,
 import (
 	"testing"
 
-	gofail "github.com/etcd-io/gofail/runtime"
+	gofail "github.com/pingcap/gofail/runtime"
 )
 
 func TestWhatever(t *testing.T) {
