@@ -85,10 +85,10 @@ func Disable(failpath string) error {
 	failpointsMu.RLock()
 	fp := failpoints[failpath]
 	failpointsMu.RUnlock()
-	close(fp.waitChan)
 	if fp == nil {
 		return ErrNoExist
 	}
+	close(fp.waitChan)
 	fp.mu.Lock()
 	defer fp.mu.Unlock()
 	if fp.t == nil {
